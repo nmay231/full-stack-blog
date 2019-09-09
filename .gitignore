@@ -1,0 +1,9 @@
+# Development
+node_modules/
+*-error.log
+
+# Deployment and Config
+dist/
+public/js/app.js
+config/*
+!config/dummy.env
