@@ -61,7 +61,7 @@ const ViewBlogPage: React.FC<IViewBlogsPage> = ({ match, history }) => {
 
     return (
         <section className="row">
-            <div className="col-12">
+            <div className="col-12 d-flex flex-column">
                 <article className="card my-5 shadow-lg rounded-lg">
                     <div className="card-header d-flex flex-column">
                         <div id="title" className="d-flex">
@@ -96,6 +96,9 @@ const ViewBlogPage: React.FC<IViewBlogsPage> = ({ match, history }) => {
                         </div>
                     </div>
                 </article>
+                <button className="btn bg-light my-3 mx-auto" onClick={() => history.goBack()}>
+                    Go Back
+                </button>
             </div>
         </section>
     )

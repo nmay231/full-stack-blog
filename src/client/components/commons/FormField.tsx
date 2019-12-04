@@ -66,9 +66,8 @@ const FormField: React.FC<
                     className="form-control"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                >
-                    {val}
-                </textarea>
+                    value={val}
+                />
             ) : (
                 <input
                     {...slices}

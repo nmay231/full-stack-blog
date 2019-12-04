@@ -1,6 +1,7 @@
 /** @format */
 
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 
 interface IBottom {
     // footer: Promise<JSX.Element>,
@@ -17,7 +18,7 @@ const Bottom: React.FC<IBottom> = ({ children, footerid }) => {
     }
 
     const intersectionObserver = new IntersectionObserver(onEntry, {
-        threshold: [0, 0.33, 0.67, 1],
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
     })
 
     const mutationObserver = new MutationObserver((mutations, observer) => {
@@ -36,12 +37,20 @@ const Bottom: React.FC<IBottom> = ({ children, footerid }) => {
 
     const styles = {
         marginBottom,
-        zIndex: 0,
+        zIndex: 1,
     }
 
     return (
-        <div className="fixed-bottom d-flex" style={styles}>
-            {children}
+        <div className="fixed-bottom d-flex flex-comlumn-reverse" style={styles}>
+            <div className="ml-auto position-relative" style={{ height: 0 }}>
+                <Link
+                    to="/donate"
+                    id="donate-button"
+                    className="btn btn-info rounded-pill mr-md-5 mr-2"
+                >
+                    Donate!
+                </Link>
+            </div>
         </div>
     )
 }

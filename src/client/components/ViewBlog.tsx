@@ -26,7 +26,9 @@ const ViewBlog: React.FC<IViewBlog> = ({ blog, preview = true, className }) => {
         <div className={className}>
             <article className="card my-2 shadow rounded-lg" style={preview ? { height: 450 } : {}}>
                 <div className="card-header d-flex flex-column">
-                    <h3 className="card-title ml-4 mt-2">{blog.title}</h3>
+                    <h3 className={'card-title ml-4 mt-2' + (preview ? ' text-truncate' : '')}>
+                        {blog.title}
+                    </h3>
                     <div className="d-flex flex-row" id="meta-data">
                         <small className="text-muted ml-auto mr-lg-5">
                             by {blog.authorName}

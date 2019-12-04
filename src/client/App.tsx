@@ -1,7 +1,7 @@
 /** @format */
 
 import * as React from 'react'
-import { BrowserRouter as Router, Route, Redirect, Switch, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 
 import HomePage from './views/HomePage'
 import MyTimelinePage from './views/MyTimelinePage'
@@ -27,16 +27,8 @@ const App: React.FC = () => {
                 <AlertProvider>
                     <LoginSubscriber />
                     {/* The <Bottom> component must be rendered first to allow the donate button to be clicked
-                        but the main screen to be in front of the `div.fixed-bottom` */}
-                    <Bottom footerid={footerid}>
-                        <Link
-                            to="/donate"
-                            id="donate-button"
-                            className="btn btn-info ml-auto rounded-pill mr-md-5 mb-md-5 mr-2 mb-3 position-relative"
-                        >
-                            Donate!
-                        </Link>
-                    </Bottom>
+                        but the main screen to be in front of an element with class .fixed-bottom */}
+                    <Bottom footerid={footerid} />
                     <main role="main" className="d-flex flex-column h-100" style={{ zIndex: -2 }}>
                         <Navigation />
                         <div className="container">

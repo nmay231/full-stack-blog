@@ -2,6 +2,12 @@
 
 @import '~bootstrap';
 
+// Donation button
+#donate-button {
+    margin-top: -60%;
+}
+
+// Alert animations
 .alert-fadein {
     animation: fadeIn 500ms ease-out;
     opacity: 1;
