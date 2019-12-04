@@ -28,7 +28,8 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
                 if (success) {
                     history.push('/')
                 } else {
-                    pushAlert({
+                    setPassword('')
+                    return pushAlert({
                         content: "Our jabberwocky didn't like your credentials. Please try again.",
                         type: 'warning',
                     })
@@ -36,7 +37,9 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
             })
         } else {
             if (password !== confirmPassword) {
-                pushAlert({
+                setPassword('')
+                setConfirmPassword('')
+                return pushAlert({
                     content: "We can't read your mind. Doublecheck your passwords are the same.",
                     type: 'warning',
                 })
@@ -45,7 +48,7 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
                 if (success) {
                     history.push('/writeblog')
                 } else {
-                    pushAlert({
+                    return pushAlert({
                         content: "Our jabberwocky didn't like your credentials. Please try again.",
                         type: 'warning',
                     })
@@ -53,14 +56,6 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
             })
         }
     }
-
-    React.useEffect(() => {
-        try {
-            document.getElementById('FirstName').focus()
-        } catch (err) {
-            document.getElementById('Email').focus()
-        }
-    }, [])
 
     return (
         <section className="row d-flex">
@@ -71,15 +66,41 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
             >
                 {registering && (
                     <>
-                        <FormField state={[firstName, setFirstName]} name="First Name" />
-                        <FormField state={[lastName, setLastName]} name="Last Name" />
+                        <FormField
+                            required
+                            autoFocus
+                            state={[firstName, setFirstName]}
+                            name="First Name"
+                            invalidMessage="Please enter your first name"
+                        />
+                        <FormField
+                            required
+                            state={[lastName, setLastName]}
+                            name="Last Name"
+                            invalidMessage="Please enter your last name"
+                        />
                         <hr />
                     </>
                 )}
-                <FormField state={[email, setEmail]} name="Email" />
-                <FormField state={[password, setPassword]} name="Password" type="password" />
+                <FormField
+                    required
+                    autoFocus={!registering}
+                    state={[email, setEmail]}
+                    name="Email"
+                    type="email"
+                    invalidMessage="Please enter a valid email"
+                />
+                <FormField
+                    required
+                    state={[password, setPassword]}
+                    name="Password"
+                    type="password"
+                    pattern="^.{8,}$"
+                    invalidMessage="A Password must have at least 8 characters"
+                />
                 {registering && (
                     <FormField
+                        required
                         state={[confirmPassword, setConfirmPassword]}
                         name="Confirm Password"
                         type="password"
