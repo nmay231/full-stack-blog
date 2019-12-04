@@ -24,43 +24,69 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
 
     const handleLogin = () => {
         if (!registering) {
+            if (!email || !password) {
+                setPassword('')
+                return pushAlert(
+                    {
+                        content: 'Please check for empty fields.',
+                        type: 'warning',
+                    },
+                    3500,
+                )
+            }
             loginLocal(email, password).then((success) => {
                 if (success) {
                     history.push('/')
                 } else {
-                    pushAlert({
-                        content: "Our jabberwocky didn't like your credentials. Please try again.",
-                        type: 'warning',
-                    })
+                    setPassword('')
+                    return pushAlert(
+                        {
+                            content:
+                                "Our jabberwocky didn't like your credentials. Please try again.",
+                            type: 'warning',
+                        },
+                        3500,
+                    )
                 }
             })
         } else {
-            if (password !== confirmPassword) {
-                pushAlert({
-                    content: "We can't read your mind. Doublecheck your passwords are the same.",
-                    type: 'warning',
-                })
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                setPassword('')
+                return pushAlert(
+                    {
+                        content: 'Please check for empty fields.',
+                        type: 'warning',
+                    },
+                    3500,
+                )
+            } else if (password !== confirmPassword) {
+                setPassword('')
+                setConfirmPassword('')
+                return pushAlert(
+                    {
+                        content:
+                            "We can't read your mind. Doublecheck your passwords are the same.",
+                        type: 'warning',
+                    },
+                    3500,
+                )
             }
             register(firstName + ' ' + lastName, email, password).then((success) => {
                 if (success) {
                     history.push('/writeblog')
                 } else {
-                    pushAlert({
-                        content: "Our jabberwocky didn't like your credentials. Please try again.",
-                        type: 'warning',
-                    })
+                    return pushAlert(
+                        {
+                            content:
+                                "Our jabberwocky didn't like your credentials. Please try again.",
+                            type: 'warning',
+                        },
+                        3500,
+                    )
                 }
             })
         }
     }
-
-    React.useEffect(() => {
-        try {
-            document.getElementById('FirstName').focus()
-        } catch (err) {
-            document.getElementById('Email').focus()
-        }
-    }, [])
 
     return (
         <section className="row d-flex">
@@ -69,17 +95,46 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
                 action={handleLogin}
                 className="col-6 border rounded shadow-lg mt-5 mx-auto"
             >
+                <p className="text-center mt-3">
+                    <span className="text-danger">*</span> Marks required fields
+                </p>
                 {registering && (
                     <>
-                        <FormField state={[firstName, setFirstName]} name="First Name" />
-                        <FormField state={[lastName, setLastName]} name="Last Name" />
+                        <FormField
+                            required
+                            autoFocus
+                            state={[firstName, setFirstName]}
+                            name="First Name"
+                            invalidMessage="Please enter your first name"
+                        />
+                        <FormField
+                            required
+                            state={[lastName, setLastName]}
+                            name="Last Name"
+                            invalidMessage="Please enter your last name"
+                        />
                         <hr />
                     </>
                 )}
-                <FormField state={[email, setEmail]} name="Email" />
-                <FormField state={[password, setPassword]} name="Password" type="password" />
+                <FormField
+                    required
+                    autoFocus={!registering}
+                    state={[email, setEmail]}
+                    name="Email"
+                    type="email"
+                    invalidMessage="Please enter a valid email"
+                />
+                <FormField
+                    required
+                    state={[password, setPassword]}
+                    name="Password"
+                    type="password"
+                    pattern="^.{8,}$"
+                    invalidMessage="A Password must have at least 8 characters"
+                />
                 {registering && (
                     <FormField
+                        required
                         state={[confirmPassword, setConfirmPassword]}
                         name="Confirm Password"
                         type="password"

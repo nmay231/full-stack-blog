@@ -26,10 +26,13 @@ const HomePage: React.FC = () => {
                     })),
                 )
             } catch (err) {
-                pushAlert({
-                    content: 'It seems we are having difficulties connecting to our servers...',
-                    type: 'danger',
-                })
+                pushAlert(
+                    {
+                        content: 'It seems we are having difficulties connecting to our servers...',
+                        type: 'danger',
+                    },
+                    5000,
+                )
             }
         })()
     }, [])

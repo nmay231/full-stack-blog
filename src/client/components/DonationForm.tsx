@@ -33,7 +33,7 @@ const DonationForm: React.FC<IDonationForm> = ({ stripe }) => {
         if (!token) {
             return pushAlert(
                 { content: 'Please double check your card information', type: 'warning' },
-                5000,
+                4000,
             )
         }
         try {

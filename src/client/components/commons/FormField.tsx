@@ -2,45 +2,88 @@
 
 import * as React from 'react'
 
-interface IFormFieldProps extends React.Props<{}> {
-    state: [string | number, (newValue: string) => void]
+interface IFormFieldProps {
+    state: [string, (s: string) => void]
     name: string
-    type?: 'text' | 'password' | 'textarea'
-    transform?: (value: string) => string
+    pattern?: string
+    invalidMessage?: string
+    type?: 'text' | 'password' | 'email' | 'textarea'
+    transform?: (s: string) => string
 }
 
-const FormField: React.FC<IFormFieldProps> = ({ state, name, type = 'text', transform }) => {
-    const [value, setValue] = state
+const FormField: React.FC<
+    IFormFieldProps & Partial<React.HTMLProps<HTMLInputElement | HTMLTextAreaElement>>
+> = ({
+    state,
+    name,
+    pattern,
+    invalidMessage = 'Please enter a valid input',
+    type = 'text',
+    transform = (s) => s,
+    ...slices
+}) => {
+    const [val, setVal] = state
+    const inputId = name.split(' ').join('-')
 
-    const handleChange: React.ChangeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let newValue = transform ? transform(e.target.value) : e.target.value
-        setValue(newValue)
+    let fieldRef = React.useRef<HTMLInputElement & HTMLTextAreaElement>()
+
+    const edited = React.useRef(false)
+    const [validityError, setValidityError] = React.useState('')
+
+    React.useEffect(() => {
+        if (edited.current && !fieldRef.current.checkValidity()) {
+            setValidityError(invalidMessage)
+        } else {
+            setValidityError('')
+        }
+    }, [fieldRef.current])
+
+    const handleChange: React.ChangeEventHandler<HTMLInputElement & HTMLTextAreaElement> = () => {
+        edited.current = true
+        setVal(transform(fieldRef.current.value))
+        setValidityError('')
     }
 
-    const fieldId = name.split(' ').join('')
+    const handleBlur: React.FocusEventHandler<HTMLInputElement & HTMLTextAreaElement> = () => {
+        if (!fieldRef.current.checkValidity()) {
+            setValidityError(invalidMessage)
+        }
+    }
 
     return (
-        <div className="form-group">
-            <div className="form-group m-3">
-                <label htmlFor={fieldId}> {name} </label>
-                {type === 'textarea' ? (
-                    <textarea
-                        rows={15}
-                        id={fieldId}
-                        className="form-control"
-                        value={value}
-                        onChange={handleChange}
-                    />
-                ) : (
-                    <input
-                        type={type}
-                        id={fieldId}
-                        className="form-control"
-                        value={value}
-                        onChange={handleChange}
-                    />
-                )}
-            </div>
+        <div className="form-group m-3">
+            <label htmlFor={inputId}>
+                {name} {slices.required && <span className="text-danger">*</span>}
+            </label>
+            {type === 'textarea' ? (
+                <textarea
+                    {...slices}
+                    placeholder={slices.placeholder || name}
+                    ref={fieldRef}
+                    id={inputId}
+                    cols={30}
+                    rows={10}
+                    className="form-control"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                >
+                    {val}
+                </textarea>
+            ) : (
+                <input
+                    {...slices}
+                    placeholder={slices.placeholder || name}
+                    ref={fieldRef}
+                    type={type}
+                    id={inputId}
+                    className="form-control"
+                    value={val}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    pattern={pattern}
+                ></input>
+            )}
+            {validityError && <p style={{ color: 'red' }}>{validityError}</p>}
         </div>
     )
 }
