@@ -24,34 +24,65 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
 
     const handleLogin = () => {
         if (!registering) {
+            if (!email || !password) {
+                setPassword('')
+                return pushAlert(
+                    {
+                        content: 'Please check for empty fields.',
+                        type: 'warning',
+                    },
+                    3500,
+                )
+            }
             loginLocal(email, password).then((success) => {
                 if (success) {
                     history.push('/')
                 } else {
                     setPassword('')
-                    return pushAlert({
-                        content: "Our jabberwocky didn't like your credentials. Please try again.",
-                        type: 'warning',
-                    })
+                    return pushAlert(
+                        {
+                            content:
+                                "Our jabberwocky didn't like your credentials. Please try again.",
+                            type: 'warning',
+                        },
+                        3500,
+                    )
                 }
             })
         } else {
-            if (password !== confirmPassword) {
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                setPassword('')
+                return pushAlert(
+                    {
+                        content: 'Please check for empty fields.',
+                        type: 'warning',
+                    },
+                    3500,
+                )
+            } else if (password !== confirmPassword) {
                 setPassword('')
                 setConfirmPassword('')
-                return pushAlert({
-                    content: "We can't read your mind. Doublecheck your passwords are the same.",
-                    type: 'warning',
-                })
+                return pushAlert(
+                    {
+                        content:
+                            "We can't read your mind. Doublecheck your passwords are the same.",
+                        type: 'warning',
+                    },
+                    3500,
+                )
             }
             register(firstName + ' ' + lastName, email, password).then((success) => {
                 if (success) {
                     history.push('/writeblog')
                 } else {
-                    return pushAlert({
-                        content: "Our jabberwocky didn't like your credentials. Please try again.",
-                        type: 'warning',
-                    })
+                    return pushAlert(
+                        {
+                            content:
+                                "Our jabberwocky didn't like your credentials. Please try again.",
+                            type: 'warning',
+                        },
+                        3500,
+                    )
                 }
             })
         }
@@ -64,6 +95,9 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
                 action={handleLogin}
                 className="col-6 border rounded shadow-lg mt-5 mx-auto"
             >
+                <p className="text-center mt-3">
+                    <span className="text-danger">*</span> Marks required fields
+                </p>
                 {registering && (
                     <>
                         <FormField

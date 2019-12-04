@@ -24,7 +24,7 @@ const useSystemAlert = () => {
             }, 410)
         }
 
-    const pushAlert = (newAlert: ISystemAlert, delayms: number | null = null) => {
+    const pushAlert = (newAlert: ISystemAlert, delayms: number = 2000) => {
         setId((prevId) => {
             setAlerts((prevAlerts: { [key: string]: ISystemAlert }) => {
                 if (delayms) {

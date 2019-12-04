@@ -58,11 +58,14 @@ const WriteBlogPage: React.FC<IWriteBlogPage> = ({ history, match }) => {
                     setContent(blog.content)
                     setTagList(blog.tags.split(';;'))
                 } catch (err) {
-                    pushAlert({
-                        content:
-                            'It seems we are having difficulties communicating with the server deities. Please try again later.',
-                        type: 'danger',
-                    })
+                    pushAlert(
+                        {
+                            content:
+                                'It seems we are having difficulties communicating with the server deities. Please try again later.',
+                            type: 'danger',
+                        },
+                        4000,
+                    )
                 }
             })()
         }
@@ -79,16 +82,21 @@ const WriteBlogPage: React.FC<IWriteBlogPage> = ({ history, match }) => {
                     await json(join(BLOGS_API, `${blogid}`, 'removetags'), 'PUT', { tags: oldTags })
                     await json(join(BLOGS_API, `${blogid}`, 'addtags'), 'PUT', { tags: tagList })
                 }
+                pushAlert({ content: 'Blog successfully updated', type: 'success' }, 3000)
             } else {
                 await json(BLOGS_API, 'POST', { ...body, tags: tagList })
+                pushAlert({ content: 'Blog successfully posted', type: 'success' }, 3000)
             }
             history.push('/')
         } catch (err) {
-            pushAlert({
-                content:
-                    "Our servers couldn't handle your blog's greatness. Please try again later.",
-                type: 'danger',
-            })
+            pushAlert(
+                {
+                    content:
+                        "Our servers couldn't handle your blog's greatness. Please try again later.",
+                    type: 'danger',
+                },
+                3500,
+            )
         }
     }
 

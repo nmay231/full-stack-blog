@@ -19,11 +19,14 @@ const MyTimelinePage: React.FC = () => {
                 let raw = await json<IBlog[]>(`${BLOGS_API}?authorid=${user.authorid}`)
                 setBlogs(raw)
             } catch (err) {
-                pushAlert({
-                    content:
-                        'It seems we are having difficulties communicating with the server deities. Please try again later.',
-                    type: 'danger',
-                })
+                pushAlert(
+                    {
+                        content:
+                            'It seems we are having difficulties communicating with the server deities. Please try again later.',
+                        type: 'danger',
+                    },
+                    5000,
+                )
             }
         })()
     }, [user.authorid])

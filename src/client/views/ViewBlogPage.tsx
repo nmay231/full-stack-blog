@@ -38,11 +38,13 @@ const ViewBlogPage: React.FC<IViewBlogsPage> = ({ match, history }) => {
                         : { ...rawBlog, tagList: [] },
                 )
             } catch (err) {
-                pushAlert({
-                    content:
-                        'It seems this blog is being tricky. Please try again later when our servers are online.',
-                    type: 'danger',
-                })
+                pushAlert(
+                    {
+                        content: 'It seems this blog is being tricky. Please try again later.',
+                        type: 'danger',
+                    },
+                    4000,
+                )
             }
         })()
     }, [id])
@@ -50,7 +52,10 @@ const ViewBlogPage: React.FC<IViewBlogsPage> = ({ match, history }) => {
     const handleDelete: React.MouseEventHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         if (confirm('Are you sure you want to delete this blog post? There is no going back...')) {
-            json(join(BLOGS_API, `${id}`), 'DELETE').then(() => history.push('/'))
+            json(join(BLOGS_API, `${id}`), 'DELETE').then(() => {
+                pushAlert({ content: 'Blog deleted', type: 'warning' }, 3000)
+                history.push('/')
+            })
         }
     }
 
