@@ -19,12 +19,18 @@ const Navigation: React.FC<INavigation> = ({ history }) => {
 
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark w-100 ml-0">
-            <div className={centerHome ? 'mx-auto' : ''}>
-                <NavLink to="/home" className="nav-item btn btn-dark my-1 mx-3">
+            <div
+                className={
+                    'my-1 mx-sm-3' +
+                    // (centerHome ? ' mx-auto' : '') // Have to wait until bug fixed
+                    ' mx-auto'
+                }
+            >
+                <NavLink to="/home" className="nav-item btn btn-dark">
                     Home
                 </NavLink>
             </div>
-            <button
+            {/* <button
                 className="navbar-toggler ml-n5"
                 type="button"
                 data-toggle="collapse"
@@ -32,8 +38,10 @@ const Navigation: React.FC<INavigation> = ({ history }) => {
                 onClick={() => setCenterHome(!centerHome)}
             >
                 <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarCollapser">
+            </button> */}
+            {/* Have to add show by default until bug with bootstrap and
+                onChange in donation page is resolved */}
+            <div className="collapse navbar-collapse show" id="navbarCollapser">
                 {isLoggedIn ? (
                     <>
                         <div className="navbar-nav align-items-center mr-auto">
