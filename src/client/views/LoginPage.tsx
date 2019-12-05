@@ -93,7 +93,7 @@ const LoginPage: React.FC<ILoginPage> = ({ history, registering }) => {
             <Form
                 submitText={registering ? 'Register' : 'Login'}
                 action={handleLogin}
-                className="col-6 border rounded shadow-lg mt-5 mx-auto"
+                className="col-10 col-md-8 col-lg-6 border rounded shadow-lg mt-5 mx-auto"
             >
                 <p className="text-center mt-3">
                     <span className="text-danger">*</span> Marks required fields

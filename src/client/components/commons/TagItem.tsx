@@ -9,7 +9,7 @@ interface ITagItem {
 }
 
 const TagItem: React.FC<ITagItem> = ({ text, click, remove }) => {
-    const handleClick: React.MouseEventHandler = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const handleClick: React.MouseEventHandler<HTMLSpanElement> = () => {
         click()
     }
 
@@ -22,7 +22,7 @@ const TagItem: React.FC<ITagItem> = ({ text, click, remove }) => {
     return (
         <span
             className="px-3 py-1 mx-2 my-1 text-nowrap border border-dark rounded-pill bg-light"
-            style={hover}
+            style={{ ...hover, height: '2rem' }}
             onClick={handleClick}
         >
             {text}
