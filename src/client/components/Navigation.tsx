@@ -1,7 +1,9 @@
 /** @format */
 
 import * as React from 'react'
-import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom'
+import { Navbar, Nav, Button } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 import useLogin from '../utils/useLogin'
 
@@ -9,71 +11,71 @@ interface INavigation extends RouteComponentProps {}
 
 const Navigation: React.FC<INavigation> = ({ history }) => {
     const { logout, isLoggedIn } = useLogin()
-    const [centerHome, setCenterHome] = React.useState(false)
+    const [expanded, setExpanded] = React.useState(false)
 
     const handleLogout: React.MouseEventHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         logout()
+        setExpanded(false)
         history.push('/')
     }
 
+    const handleButtonClicked: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+        e.currentTarget.blur()
+        setExpanded(false)
+    }
+
     return (
-        <nav className="navbar navbar-expand-sm navbar-dark bg-dark w-100 ml-0">
-            <div
-                className={
-                    'my-1 mx-sm-3' +
-                    // (centerHome ? ' mx-auto' : '') // Have to wait until bug fixed
-                    ' mx-auto'
-                }
-            >
-                <NavLink to="/home" className="nav-item btn btn-dark">
-                    Home
-                </NavLink>
-            </div>
-            {/* <button
-                className="navbar-toggler ml-n5"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarCollapser"
-                onClick={() => setCenterHome(!centerHome)}
-            >
-                <span className="navbar-toggler-icon"></span>
-            </button> */}
-            {/* Have to add show by default until bug with bootstrap and
-                onChange in donation page is resolved */}
-            <div className="collapse navbar-collapse show" id="navbarCollapser">
+        <Navbar expand="sm" expanded={expanded} bg="dark" variant="dark">
+            <Navbar.Brand className={'my-1 mx-sm-3' + (expanded ? ' mx-auto' : '')}>
+                <LinkContainer to="/home">
+                    <Button onClick={handleButtonClicked} variant="dark">
+                        Home
+                    </Button>
+                </LinkContainer>
+            </Navbar.Brand>
+            <Navbar.Toggle
+                onClick={() => setExpanded(!expanded)}
+                aria-controls="basic-navbar-nav"
+                className="ml-n5"
+            />
+            <Navbar.Collapse>
                 {isLoggedIn ? (
                     <>
-                        <div className="navbar-nav align-items-center mr-auto">
-                            <NavLink to="/mytimeline" className="nav-item btn btn-dark my-1 mx-3">
-                                My Timeline
-                            </NavLink>
-                            <NavLink to="/writeblog" className="nav-item btn btn-dark my-1 mx-3">
-                                New Blog
-                            </NavLink>
-                        </div>
-                        <div className="navbar-nav align-items-center">
-                            <button
-                                role="button"
-                                className="nav-item btn btn-dark my-1 mx-3"
-                                onClick={handleLogout}
-                            >
+                        <Nav className="align-items-center mr-auto">
+                            <LinkContainer to="/mytimeline" className="my-1 mx-3">
+                                <Button onClick={handleButtonClicked} variant="dark">
+                                    My Timeline
+                                </Button>
+                            </LinkContainer>
+                            <LinkContainer to="/writeblog" className="my-1 mx-3">
+                                <Button onClick={handleButtonClicked} variant="dark">
+                                    New Blog
+                                </Button>
+                            </LinkContainer>
+                        </Nav>
+                        <Nav className="align-items-center">
+                            <Button variant="dark" className="my-1 mx-3" onClick={handleLogout}>
                                 Logout
-                            </button>
-                        </div>
+                            </Button>
+                        </Nav>
                     </>
                 ) : (
-                    <div className="navbar-nav align-items-center ml-auto">
-                        <NavLink to="/login" className="nav-item btn btn-dark my-1 mx-3 ml-sm-auto">
-                            Login
-                        </NavLink>
-                        <NavLink to="/register" className="nav-item btn btn-dark my-1 mx-3">
-                            Register
-                        </NavLink>
-                    </div>
+                    <Nav className="align-items-center ml-auto">
+                        <LinkContainer to="/login" className="my-1 mx-3 ml-sm-auto">
+                            <Button onClick={handleButtonClicked} variant="dark">
+                                Login
+                            </Button>
+                        </LinkContainer>
+                        <LinkContainer to="/register" className="my-1 mx-3">
+                            <Button onClick={handleButtonClicked} variant="dark">
+                                Register
+                            </Button>
+                        </LinkContainer>
+                    </Nav>
                 )}
-            </div>
-        </nav>
+            </Navbar.Collapse>
+        </Navbar>
     )
 }
 

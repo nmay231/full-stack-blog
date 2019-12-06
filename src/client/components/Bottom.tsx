@@ -1,15 +1,17 @@
 /** @format */
 
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 
-interface IBottom {
+interface IBottom extends RouteComponentProps {
     // footer: Promise<JSX.Element>,
     footerid: string
 }
 
-const Bottom: React.FC<IBottom> = ({ children, footerid }) => {
+const Bottom: React.FC<IBottom> = ({ history, footerid }) => {
     const [marginBottom, setMarginBottom] = React.useState(0)
+    const loc = history.location.pathname
+    const donateButtonVisible = loc === '/home' || loc === '/mytimeline'
 
     const onEntry: IntersectionObserverCallback = (entry) => {
         for (let change of entry) {
@@ -43,16 +45,18 @@ const Bottom: React.FC<IBottom> = ({ children, footerid }) => {
     return (
         <div className="fixed-bottom d-flex flex-comlumn-reverse" style={styles}>
             <div className="ml-auto position-relative" style={{ height: 0 }}>
-                <Link
-                    to="/donate"
-                    id="donate-button"
-                    className="btn btn-info rounded-pill mr-md-5 mr-2"
-                >
-                    Donate!
-                </Link>
+                {donateButtonVisible && (
+                    <Link
+                        to="/donate"
+                        id="donate-button"
+                        className="btn btn-info rounded-pill mr-md-5 mr-2"
+                    >
+                        Donate!
+                    </Link>
+                )}
             </div>
         </div>
     )
 }
 
-export default Bottom
+export default withRouter(Bottom)
